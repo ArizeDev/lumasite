@@ -33,6 +33,15 @@
                         <div class="pricing-price">$10<span class="billing-cycle">/month</span></div>
                         <button class="buy-button">Choose Plan</button>
                     </div>
+
+                  <div class="modal-overlay" id="planModal">
+                    <div class="modal">
+                      <h2 id="modalTitle">Selected Plan</h2>
+                      <p id="modalPrice">Plan price will show here.</p>
+                      <button>Proceed</button>
+                      <button class="close-btn" id="closeModal">Close</button>
+                    </div>
+                  </div>
                     
                     <div class="pricing-card basic">
                         <div class="plan-name">Starter</div>
@@ -278,6 +287,55 @@
         backdrop-filter: blur(8px);
         border: 1px solid var(--border);
         box-shadow: var(--box-shadow);
+    }
+
+      /* Popup background */
+    .modal-overlay {
+      display: none; 
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    /* Popup box */
+    .modal {
+      background: white;
+      padding: 25px;
+      border-radius: 8px;
+      width: 350px;
+      text-align: center;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .modal h2 {
+      margin-bottom: 10px;
+    }
+
+    .modal button {
+      margin-top: 15px;
+      padding: 10px 18px;
+      background: #5865F2;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close-btn {
+      background: #ccc;
+      margin-left: 10px;
+    }
+
+    @keyframes fadeIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
 
     .logo h2 {
@@ -640,5 +698,34 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+    const buttons = document.querySelectorAll(".buy-button");
+    const modalOverlay = document.getElementById("planModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalPrice = document.getElementById("modalPrice");
+    const closeModal = document.getElementById("closeModal");
+
+    buttons.forEach(button => {
+      button.addEventListener("click", () => {
+        const card = button.closest(".pricing-card");
+        const planName = card.querySelector(".plan-name").textContent;
+        const planPrice = card.querySelector(".pricing-price").textContent;
+
+        modalTitle.textContent = planName;
+        modalPrice.textContent = "Price: " + planPrice;
+
+        modalOverlay.style.display = "flex";
+      });
+    });
+
+    closeModal.addEventListener("click", () => {
+      modalOverlay.style.display = "none";
+    });
+
+    window.addEventListener("click", (e) => {
+      if (e.target === modalOverlay) {
+        modalOverlay.style.display = "none";
+      }
+    });
 </script>
 <div id="give-freely-root-ejkiikneibegknkgimmihdpcbcedgmpo" class="give-freely-root" data-extension-id="ejkiikneibegknkgimmihdpcbcedgmpo" data-extension-name="Volume Booster" style="display: block;"></div></body></html>
