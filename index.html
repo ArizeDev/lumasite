@@ -36,11 +36,10 @@
 
                     <div class="modal-overlay" id="planModal">
                       <div class="modal">
-                        <h2 id="modalTitle">Selected Plan</h2>
+                        <h2 id="modalTitle">Purchase</h2>
                         <div id="modalFeatures"></div>
                         <p id="modalPrice"></p>
                         <div class="modal-actions">
-                          <button class="proceed-btn">Proceed</button>
                           <button class="close-btn" id="closeModal">Close</button>
                         </div>
                       </div>
@@ -742,7 +741,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       modalFeatures.innerHTML = "";
       features.forEach(f => {
-        modalFeatures.innerHTML += `<div class="feature-item">${f.innerHTML}</div>`;
+        modalFeatures.innerHTML += `Please join our Discord to purchase.`;
       });
 
       modalOverlay.style.display = "flex";
