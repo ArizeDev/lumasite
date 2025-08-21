@@ -42,6 +42,9 @@
                         <div class="modal-actions">
                           <button class="close-btn" id="closeModal">Close</button>
                         </div>
+                        <div class="modal-actions">
+                          <button class="close-btn" id="closeModal">Join Discord</button>
+                        </div>
                       </div>
                     </div>
                     
@@ -740,9 +743,7 @@ document.addEventListener('DOMContentLoaded', function() {
       modalPrice.textContent = "Price: " + planPrice;
 
       modalFeatures.innerHTML = "";
-      features.forEach(f => {
-        modalFeatures.innerHTML += `Please join our Discord to purchase.`;
-      });
+      modalFeatures.innerHTML += `Please join our Discord to purchase.`;
 
       modalOverlay.style.display = "flex";
     });
