@@ -34,13 +34,17 @@
                         <button class="buy-button">Choose Plan</button>
                     </div>
 
-                  <div class="modal-overlay" id="planModal">
-                    <div class="modal">
-                      <h2 id="modalTitle">Selected Plan</h2>
-                      <p id="modalPrice">Please open a ticket in Discord to buy.</p>
-                      <button class="close-btn" id="closeModal">Close</button>
+                    <div class="modal-overlay" id="planModal">
+                      <div class="modal">
+                        <h2 id="modalTitle">Selected Plan</h2>
+                        <div id="modalFeatures"></div>
+                        <p id="modalPrice"></p>
+                        <div class="modal-actions">
+                          <button class="proceed-btn">Proceed</button>
+                          <button class="close-btn" id="closeModal">Close</button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
                     
                     <div class="pricing-card basic">
                         <div class="plan-name">Starter</div>
@@ -288,57 +292,84 @@
         box-shadow: var(--box-shadow);
     }
 
-/* Popup background */
-.modal-overlay {
-  display: none; 
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
+  /* Modal background */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+  }
 
-/* Popup box */
-.modal {
-  background: #ffffff; /* white background */
-  padding: 25px;
-  border-radius: 12px;
-  width: 380px;
-  text-align: center;
-  box-shadow: var(--box-shadow);
-  animation: fadeIn 0.3s ease-in-out;
-  color: #000000;  /* black text */
-}
+  /* Modal box */
+  .modal {
+    background: #fff;
+    color: #000;
+    padding: 25px;
+    border-radius: 12px;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+    animation: fadeIn 0.3s ease-in-out;
+  }
 
-.modal h2, .modal p {
-  color: #000000; /* force black */
-}
+  .modal h2 {
+    margin-bottom: 15px;
+  }
 
-.modal button {
-  margin-top: 15px;
-  padding: 10px 18px;
-  background: var(--discord);
-  border: none;
-  border-radius: 6px;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  transition: var(--transition);
-}
+  #modalFeatures {
+    text-align: left;
+    margin: 10px 0 15px;
+    font-size: 0.95rem;
+    color: #333;
+  }
 
-.modal button:hover {
-  background: var(--accent-hover);
-}
+  #modalFeatures .feature-item {
+    margin-bottom: 8px;
+  }
 
-.close-btn {
-  background: #ccc;
-  color: #000;
-  margin-left: 10px;
-}
+  .modal-actions {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
 
+  .modal button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .proceed-btn {
+    background: #5865F2;
+    color: #fff;
+  }
+
+  .proceed-btn:hover {
+    background: #4752c4;
+  }
+
+  .close-btn {
+    background: #ccc;
+    color: #000;
+  }
+
+  .close-btn:hover {
+    background: #aaa;
+  }
+
+  @keyframes fadeIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
 
     .logo h2 {
         font-weight: 700;
@@ -692,34 +723,41 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  const buttons = document.querySelectorAll(".buy-button");
+  const modalOverlay = document.getElementById("planModal");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalPrice = document.getElementById("modalPrice");
+  const modalFeatures = document.getElementById("modalFeatures");
+  const closeModal = document.getElementById("closeModal");
 
-    const buttons = document.querySelectorAll(".buy-button");
-    const modalOverlay = document.getElementById("planModal");
-    const modalTitle = document.getElementById("modalTitle");
-    const modalPrice = document.getElementById("modalPrice");
-    const closeModal = document.getElementById("closeModal");
+  buttons.forEach(button => {
+    button.addEventListener("click", () => {
+      const card = button.closest(".pricing-card");
+      const planName = card.querySelector(".plan-name").textContent;
+      const planPrice = card.querySelector(".pricing-price").textContent;
+      const features = card.querySelectorAll(".pricing-features .feature-item");
 
-    buttons.forEach(button => {
-      button.addEventListener("click", () => {
-        const card = button.closest(".pricing-card");
-        const planName = card.querySelector(".plan-name").textContent;
-        const planPrice = card.querySelector(".pricing-price").textContent;
+      modalTitle.textContent = planName;
+      modalPrice.textContent = "Price: " + planPrice;
 
-        modalTitle.textContent = planName;
-        modalPrice.textContent = "Price: " + planPrice;
-
-        modalOverlay.style.display = "flex";
+      modalFeatures.innerHTML = "";
+      features.forEach(f => {
+        modalFeatures.innerHTML += `<div class="feature-item">${f.innerHTML}</div>`;
       });
-    });
 
-    closeModal.addEventListener("click", () => {
+      modalOverlay.style.display = "flex";
+    });
+  });
+
+  closeModal.addEventListener("click", () => {
+    modalOverlay.style.display = "none";
+  });
+
+  window.addEventListener("click", (e) => {
+    if (e.target === modalOverlay) {
       modalOverlay.style.display = "none";
-    });
-
-    window.addEventListener("click", (e) => {
-      if (e.target === modalOverlay) {
-        modalOverlay.style.display = "none";
-      }
-    });
+    }
+  });
+});
 </script>
 <div id="give-freely-root-ejkiikneibegknkgimmihdpcbcedgmpo" class="give-freely-root" data-extension-id="ejkiikneibegknkgimmihdpcbcedgmpo" data-extension-name="Volume Booster" style="display: block;"></div></body></html>
